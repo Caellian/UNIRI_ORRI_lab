@@ -1,5 +1,6 @@
 //using System.Collections;
 //using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -25,10 +26,10 @@ public class PlayerMovement : MonoBehaviour
         // controlls
         horizontalAxis = Input.GetAxis("Horizontal");  // GetAxisRaw
         jump = Input.GetKey(KeyCode.Space) || Input.GetAxis("Vertical") > 0.5;
-
+       
         // sprite mirror
         transform.localScale = new Vector3(horizontalAxis < 0 ? -1 : 1, 1, 1);
-        animator.SetBool("running", horizontalAxis != 0);
+        animator.SetBool("running", Math.Abs(horizontalAxis) > 0.25);
     }
 
     void FixedUpdate()
@@ -38,8 +39,15 @@ public class PlayerMovement : MonoBehaviour
         //body.AddForce(transform.right * horizontalAxis * speed);
 
         // jump
-        if (jump && IsGrounded())
-            body.velocity = new Vector2(body.velocity.x, jumpSpeed);
+        if (IsGrounded())
+        {
+            animator.SetBool("jumping", false);
+            if (jump)
+            {
+                animator.SetBool("jumping", true);
+                body.velocity = new Vector2(body.velocity.x, jumpSpeed);
+            }
+        }
     }
 
     /*void OnCollisionEnter2D(Collision2D collision)
