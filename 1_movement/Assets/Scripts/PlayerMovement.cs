@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
         jump = Input.GetKey(KeyCode.Space) || Input.GetAxis("Vertical") > 0.5;
        
         // sprite mirror
-        transform.localScale = new Vector3(horizontalAxis < 0 ? -1 : 1, 1, 1);
+        transform.localRotation = Quaternion.Euler(0, horizontalAxis < 0 ? 180 : 0, 0);
         animator.SetBool("running", Math.Abs(horizontalAxis) > 0.25);
     }
 
